@@ -34,20 +34,21 @@ assign badoneway =
        else oneway=-1
 assign disallowed = access=no|private
 
+assign scary_road = highway=trunk|motorway|trunk_link|motorway_link
 
 assign costfactor = 
           switch or badoneway disallowed 3000 
-					switch highway=cycleway 2
+	  switch highway=cycleway 2
           switch cycleway=lane|track|yes
-                   		switch highway=trunk|motorway 15
-						          switch highway=primary 9
-                      4
-          switch highway=residential 27
-          switch highway=unclassified 30
-          switch highway=tertiary 35
-          switch highway=secondary 130
-          switch highway=primary	230
-				  switch highway=trunk|motorway 500
+                   switch scary_road 12
+		   switch highway=primary|primary_link 9
+		   4   
+          switch highway=residential 10
+          switch highway=unclassified 11
+          switch highway=tertiary|tertiary_link 14
+          switch highway=secondary|secondary_link 75
+          switch highway=primary|primary_link	190
+          switch scary_road 5000
           switch highway=footway|service 180
 				  100
 
