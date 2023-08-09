@@ -1,0 +1,56 @@
+---context:global
+
+assign validForBikes = true
+assign validForFoot = false
+assign validForCars = false
+
+assign downhillcost = 1
+assign downhillcutoff = 2
+assign uphillcost = 2
+assign uphillcutoff = 2
+assign elevationpenaltybuffer = 5
+assign elevationmaxbuffer = 10
+assign elevationbufferreduce = 0
+
+assign pass1coefficient = 1
+assign pass2coefficient = 0
+
+assign turnInstructionMode = 1
+assign turnInstructionCatchingRange = 40
+assign turnInstructionRoundabouts = true
+
+assign processUnusedTags = false
+
+---context:way
+
+assign turncost = 20
+assign initialcost = 200
+
+assign badoneway =
+       if reversedirection=yes then
+         if oneway:bicycle=yes then true
+         else if oneway= then junction=roundabout
+         else oneway=yes|true|1
+       else oneway=-1
+assign disallowed = access=no|private
+
+
+assign costfactor = 
+          switch or badoneway disallowed 3000 
+					switch highway=cycleway 2
+          switch cycleway=lane|track|yes
+                   		switch highway=trunk|motorway 15
+						          switch highway=primary 9
+                      4
+          switch highway=residential 27
+          switch highway=unclassified 30
+          switch highway=tertiary 35
+          switch highway=secondary 130
+          switch highway=primary	230
+				  switch highway=trunk|motorway 500
+          switch highway=footway|service 180
+				  100
+
+---context:node
+
+assign initialcost = 200
