@@ -1,0 +1,99 @@
+---context:global
+
+assign validForBikes = true
+assign validForFoot = false
+assign validForCars = false
+
+assign downhillcost = 1
+assign downhillcutoff = 2
+assign uphillcost = 2
+assign uphillcutoff = 2
+assign elevationpenaltybuffer = 5
+assign elevationmaxbuffer = 10
+assign elevationbufferreduce = 0
+
+assign pass1coefficient = 1
+assign pass2coefficient = 0
+
+assign turnInstructionMode = 1
+assign turnInstructionCatchingRange = 40
+assign turnInstructionRoundabouts = true
+
+assign processUnusedTags = false
+
+---context:way
+
+assign turncost = 20
+assign initialcost = 0
+
+assign badoneway =
+       if reversedirection=yes then
+         if oneway:bicycle=yes then true
+         else if oneway= then junction=roundabout
+         else oneway=yes|true|1
+       else oneway=-1
+assign disallowed = access=no|private
+
+assign scary_road = highway=trunk|motorway|trunk_link|motorway_link
+
+assign costfactor = 
+          	switch or badoneway disallowed 3000 
+            switch scary_road 5000
+            # Trails Costs
+            switch highway=cycleway switch surface=asphalt|concrete|paved|wood|metal 1
+    switch surface=dirt|ground|gravel|fine_gravel|unpaved|grass|compacted|sand|sett|mud 1.95 1.05
+            
+            # Bike Lane Paths Cost
+            # CYCLEWAY:BOTH NOT SUPPORTED BY BROUTER D:<
+            switch or or cycleway=lane|both|track|yes cycleway:right=lane|track|yes cycleway:left=opposite  switch highway=residential switch surface=asphalt|concrete|paved|wood|metal 1.1
+    switch surface=dirt|ground|gravel|fine_gravel|unpaved|grass|compacted|sand|sett|mud 3 1.11
+ switch highway=unclassified switch surface=asphalt|concrete|paved|wood|metal 1.12
+    switch surface=dirt|ground|gravel|fine_gravel|unpaved|grass|compacted|sand|sett|mud 3.5 1.15
+ switch highway=tertiary|tertiary_link switch surface=asphalt|concrete|paved|wood|metal 1.4
+    switch surface=dirt|ground|gravel|fine_gravel|unpaved|grass|compacted|sand|sett|mud 3.5 1.5
+ switch highway=secondary|secondary_link switch surface=asphalt|concrete|paved|wood|metal 1.9
+    switch surface=dirt|ground|gravel|fine_gravel|unpaved|grass|compacted|sand|sett|mud 3.5 1.95
+ switch highway=primary|primary_link switch surface=asphalt|concrete|paved|wood|metal 2.1
+    switch surface=dirt|ground|gravel|fine_gravel|unpaved|grass|compacted|sand|sett|mud 3 2.15
+switch surface=asphalt|concrete|paved|wood|metal 1.75
+    switch surface=dirt|ground|gravel|fine_gravel|unpaved|grass|compacted|sand|sett|mud 3.25 1.85
+            
+            # Sharrow Road Discounted Costs
+          	switch or cycleway=shared_lane cycleway:right=shared_lane  switch highway=residential switch surface=asphalt|concrete|paved|wood|metal 1.99
+    switch surface=dirt|ground|gravel|fine_gravel|unpaved|grass|compacted|sand|sett|mud 9 2
+ switch highway=unclassified switch surface=asphalt|concrete|paved|wood|metal 1.99
+    switch surface=dirt|ground|gravel|fine_gravel|unpaved|grass|compacted|sand|sett|mud 10 2
+ switch highway=tertiary|tertiary_link switch surface=asphalt|concrete|paved|wood|metal 2.75
+    switch surface=dirt|ground|gravel|fine_gravel|unpaved|grass|compacted|sand|sett|mud 11 2.8
+ switch highway=secondary|secondary_link switch surface=asphalt|concrete|paved|wood|metal 9.5
+    switch surface=dirt|ground|gravel|fine_gravel|unpaved|grass|compacted|sand|sett|mud 22 10
+ switch highway=primary|primary_link switch surface=asphalt|concrete|paved|wood|metal 19
+    switch surface=dirt|ground|gravel|fine_gravel|unpaved|grass|compacted|sand|sett|mud 33 20
+switch surface=asphalt|concrete|paved|wood|metal 72
+    switch surface=dirt|ground|gravel|fine_gravel|unpaved|grass|compacted|sand|sett|mud 35 70
+            
+            # Default Normal Road Costs
+          	 switch highway=residential switch surface=asphalt|concrete|paved|wood|metal 2.15
+    switch surface=dirt|ground|gravel|fine_gravel|unpaved|grass|compacted|sand|sett|mud 9 2.2
+ switch highway=unclassified switch surface=asphalt|concrete|paved|wood|metal 2.22
+    switch surface=dirt|ground|gravel|fine_gravel|unpaved|grass|compacted|sand|sett|mud 10 2.3
+ switch highway=tertiary|tertiary_link switch surface=asphalt|concrete|paved|wood|metal 3.5
+    switch surface=dirt|ground|gravel|fine_gravel|unpaved|grass|compacted|sand|sett|mud 11 3.75
+ switch highway=secondary|secondary_link switch surface=asphalt|concrete|paved|wood|metal 14
+    switch surface=dirt|ground|gravel|fine_gravel|unpaved|grass|compacted|sand|sett|mud 22 15
+ switch highway=primary|primary_link switch surface=asphalt|concrete|paved|wood|metal 48
+    switch surface=dirt|ground|gravel|fine_gravel|unpaved|grass|compacted|sand|sett|mud 33 50
+ switch highway=motorway|motorway_link switch surface=asphalt|concrete|paved|wood|metal 5000
+    switch surface=dirt|ground|gravel|fine_gravel|unpaved|grass|compacted|sand|sett|mud 5000 5000
+ switch highway=trunk|trunk_link switch surface=asphalt|concrete|paved|wood|metal 4999
+    switch surface=dirt|ground|gravel|fine_gravel|unpaved|grass|compacted|sand|sett|mud 5000 5000
+ switch highway=footway switch surface=asphalt|concrete|paved|wood|metal 23
+    switch surface=dirt|ground|gravel|fine_gravel|unpaved|grass|compacted|sand|sett|mud 75 40
+ switch highway=service switch surface=asphalt|concrete|paved|wood|metal 50
+    switch surface=dirt|ground|gravel|fine_gravel|unpaved|grass|compacted|sand|sett|mud 75 52
+switch surface=asphalt|concrete|paved|wood|metal 72
+    switch surface=dirt|ground|gravel|fine_gravel|unpaved|grass|compacted|sand|sett|mud 35 75
+
+---context:node
+
+assign initialcost = 0
